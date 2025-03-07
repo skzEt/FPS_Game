@@ -13,4 +13,10 @@ public class KeyboardHelper : MonoBehaviour
         if (Input.GetKey(KeyCode.Q)) {return true;}
         return false;
     }
+
+    public static bool isKeyDownSpace()
+    {
+        if (Input.GetKeyDown(KeyCode.Space)) {return true;}
+        return false;
+    }
 }
