@@ -1,9 +1,9 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class Inventory : ScriptableObject
+public class Inventory : MonoBehaviour
 {
-    private int maxItems = 5;
+    private int maxItems = 4;
     public List<ItemInstance> items = new();
 
     public bool addItem(ItemInstance item)
@@ -17,7 +17,7 @@ public class Inventory : ScriptableObject
             }
         }
 
-        if (items.Count < maxItems)
+        if (items.Count <= maxItems)
         {
             items.Add(item);
             return true;

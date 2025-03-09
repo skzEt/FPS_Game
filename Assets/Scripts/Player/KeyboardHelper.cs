@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class KeyboardHelper : MonoBehaviour
+public class KeyboardHelper : ScriptableObject
 {
     public static bool isKeyShiftHolding()
     {
