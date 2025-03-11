@@ -11,6 +11,7 @@ public class Gun : MonoBehaviour
     float timeSinceLastShot;
     
     private bool CanShoot() => !gunData.reloading && timeSinceLastShot > 1f / (gunData.ammoRate / 60f);
+    private bool shoot;
     private void Start()
     {
         PlayerShoot.shootInput += Shoot;
@@ -19,7 +20,7 @@ public class Gun : MonoBehaviour
 
     public void StartReloading()
     {
-        if (!gunData.reloading)
+        if (!gunData.reloading && gunData.currentAmmo != 32 && gunData.bonusAmmo > 0 && shoot == false)
         {
             StartCoroutine(Reload());
         }
@@ -29,8 +30,28 @@ public class Gun : MonoBehaviour
     {
         gunData.reloading = true;
         yield return new WaitForSeconds(gunData.reloadTime);
-
-        gunData.currentAmmo = gunData.magazineSize;
+        
+        if (gunData.currentAmmo == 0 && gunData.bonusAmmo >= 32)
+        {
+            gunData.bonusAmmo -= gunData.magazineSize;
+            gunData.currentAmmo = gunData.magazineSize;
+        }
+        else if (gunData.bonusAmmo >= 32 && gunData.currentAmmo > 0)
+        {
+            int result = gunData.magazineSize - gunData.currentAmmo;
+            gunData.bonusAmmo -= result;
+            gunData.currentAmmo = gunData.magazineSize;
+        }
+        else if (gunData.bonusAmmo < 32 && gunData.currentAmmo > 0)
+        {
+            // ЗАВТРА СДЕЛАТЬ - НЕ СДЕЛАЛ ЕБАНЫЙ ЛОХ
+        }
+        else if (gunData.bonusAmmo < 32 && gunData.currentAmmo == 0)
+        {
+            gunData.currentAmmo = gunData.bonusAmmo;
+            gunData.bonusAmmo = 0;
+            
+        }
         gunData.reloading = false;
     }
 
@@ -42,10 +63,12 @@ public class Gun : MonoBehaviour
             {
                 if (Physics.Raycast(muzzle.position, transform.forward, out RaycastHit hitInfo, gunData.maxDistance))
                 {
+                    shoot = true;
                     IDamageble damageble = hitInfo.transform.GetComponent<IDamageble>();
                     damageble?.Damage(gunData.damage);
                 }
 
+                shoot = false;
                 gunData.currentAmmo--;
                 timeSinceLastShot = 0;
                 OnGunShot();
