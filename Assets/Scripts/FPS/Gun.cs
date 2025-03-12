@@ -20,7 +20,7 @@ public class Gun : MonoBehaviour
 
     public void StartReloading()
     {
-        if (!gunData.reloading && gunData.currentAmmo != 32 && gunData.bonusAmmo > 0 && shoot == false)
+        if (!gunData.reloading && gunData.currentAmmo != gunData.magazineSize && gunData.bonusAmmo > 0 && shoot == false)
         {
             StartCoroutine(Reload());
         }
@@ -31,26 +31,35 @@ public class Gun : MonoBehaviour
         gunData.reloading = true;
         yield return new WaitForSeconds(gunData.reloadTime);
         
-        if (gunData.currentAmmo == 0 && gunData.bonusAmmo >= 32)
+        if (gunData.currentAmmo == 0 && gunData.bonusAmmo >= gunData.magazineSize)
         {
             gunData.bonusAmmo -= gunData.magazineSize;
             gunData.currentAmmo = gunData.magazineSize;
         }
-        else if (gunData.bonusAmmo >= 32 && gunData.currentAmmo > 0)
+        else if (gunData.bonusAmmo >= gunData.magazineSize && gunData.currentAmmo > 0)
         {
             int result = gunData.magazineSize - gunData.currentAmmo;
             gunData.bonusAmmo -= result;
             gunData.currentAmmo = gunData.magazineSize;
         }
-        else if (gunData.bonusAmmo < 32 && gunData.currentAmmo > 0)
+        else if (gunData.bonusAmmo < gunData.magazineSize && gunData.currentAmmo > 0)
         {
-            // ЗАВТРА СДЕЛАТЬ - НЕ СДЕЛАЛ ЕБАНЫЙ ЛОХ
+            int neededAmmo = gunData.magazineSize - gunData.currentAmmo;
+            if (gunData.bonusAmmo >= neededAmmo)
+            {
+                gunData.bonusAmmo -= neededAmmo;
+                gunData.currentAmmo = gunData.magazineSize;
+            }
+            else
+            {
+                gunData.currentAmmo += gunData.bonusAmmo;
+                gunData.bonusAmmo = 0;
+            }
         }
-        else if (gunData.bonusAmmo < 32 && gunData.currentAmmo == 0)
+        else if (gunData.bonusAmmo < gunData.magazineSize && gunData.currentAmmo == 0)
         {
             gunData.currentAmmo = gunData.bonusAmmo;
             gunData.bonusAmmo = 0;
-            
         }
         gunData.reloading = false;
     }
@@ -86,5 +95,6 @@ public class Gun : MonoBehaviour
 
     private void OnGunShot()
     {
+        
     }
 }

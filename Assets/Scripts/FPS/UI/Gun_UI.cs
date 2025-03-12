@@ -9,12 +9,13 @@ using System.Linq;
 
 public class Gun_UI : MonoBehaviour
 {
+    [Header("References")]
     [SerializeField] private GunData gunData;
     [SerializeField] private TMP_Text name;
     [SerializeField] private TMP_Text ammo;
     
     private List<char> symbolsList = new List<char>(){'#', '@', '!', '$', '%', '&', 'n', '?'};
-    private List<char> symbolsList_1 = new List<char>(){'?', '$', '<', '[', ')', '-', 'c', '>'};
+    private List<char> symbolsList_1 = new List<char>() { '?', '$', '<', '[', ')', '-', 'c', '>' };
 
 void Update()
     {
@@ -37,7 +38,8 @@ void Update()
             {
                 int output = new Random().Next(0, symbolsList.Count);
                 int output_1 = new Random().Next(0, symbolsList_1.Count);
-                ammo.text = symbolsList.ElementAt(output).ToString() + "/" + symbolsList_1.ElementAt(output).ToString();
+                int used = 0;
+                ammo.text = symbolsList.ElementAt(output).ToString() + "/" + symbolsList_1.ElementAt(output_1).ToString();
                 yield return new WaitForSeconds(gunData.reloadTime);
                 ammo.text = gunData.currentAmmo.ToString() + "/" + gunData.bonusAmmo;
                 break;

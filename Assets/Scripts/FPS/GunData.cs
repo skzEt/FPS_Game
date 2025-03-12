@@ -14,6 +14,7 @@ public class GunData : ScriptableObject
     public int bonusAmmo;
     public float ammoRate;
     public float reloadTime;
+    public float knockback;
     [HideInInspector]
-    public bool reloading;
+    public bool reloading = false;
 }
