@@ -6,10 +6,8 @@ public class Gun : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] private GunData gunData;
-    [SerializeField] private Transform muzzle;
-    
+
     float timeSinceLastShot;
-    
     private bool CanShoot() => !gunData.reloading && timeSinceLastShot > 1f / (gunData.ammoRate / 60f);
     private bool shoot;
     private void Start()
@@ -70,7 +68,8 @@ public class Gun : MonoBehaviour
         {
             if (CanShoot())
             {
-                if (Physics.Raycast(muzzle.position, transform.forward, out RaycastHit hitInfo, gunData.maxDistance))
+                Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+                if (Physics.Raycast(ray.origin, ray.direction, out RaycastHit hitInfo, gunData.maxDistance))
                 {
                     shoot = true;
                     IDamageble damageble = hitInfo.transform.GetComponent<IDamageble>();
@@ -88,8 +87,8 @@ public class Gun : MonoBehaviour
     private void Update()
     {
         timeSinceLastShot += Time.deltaTime;
-        
-        Debug.DrawRay(muzzle.position, transform.forward);
+        Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+        Debug.DrawRay(ray.origin, ray.direction);
     }
 
 
