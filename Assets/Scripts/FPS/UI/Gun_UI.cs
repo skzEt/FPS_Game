@@ -38,7 +38,6 @@ void Update()
             {
                 int output = new Random().Next(0, symbolsList.Count);
                 int output_1 = new Random().Next(0, symbolsList_1.Count);
-                int used = 0;
                 ammo.text = symbolsList.ElementAt(output).ToString() + "/" + symbolsList_1.ElementAt(output_1).ToString();
                 yield return new WaitForSeconds(gunData.reloadTime);
                 ammo.text = gunData.currentAmmo.ToString() + "/" + gunData.bonusAmmo;

@@ -1,22 +1,22 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
-public class KeyboardHelper : ScriptableObject
+public class KeyboardHelper : MonoBehaviour
 {
-    public static bool isKeyShiftHolding()
+    public static Action qInput;
+    public static Action shootInput;
+    public static Action reloadInput;
+    public static Action spaceInput;
+    
+    [SerializeField] private KeyCode qKey;
+    [SerializeField] private KeyCode reloadKey;
+    [SerializeField] private KeyCode spaceKey;
+    
+    private void Update()
     {
-        if (Input.GetKey(KeyCode.LeftShift)) {return true;}
-        return false;
-    }
-
-    public static bool isKeyQHolding()
-    {
-        if (Input.GetKey(KeyCode.Q)) {return true;}
-        return false;
-    }
-
-    public static bool isKeyDownSpace()
-    {
-        if (Input.GetKeyDown(KeyCode.Space)) {return true;}
-        return false;
+        if (Input.GetMouseButtonDown(0)) { shootInput?.Invoke(); }
+        if (Input.GetKeyDown(reloadKey)) { reloadInput?.Invoke(); }
+        if (Input.GetKeyDown(qKey)) { qInput?.Invoke(); }
+        if (Input.GetKeyDown(spaceKey)) { spaceInput?.Invoke(); }
     }
 }

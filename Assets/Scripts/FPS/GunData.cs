@@ -17,4 +17,5 @@ public class GunData : ScriptableObject
     public float knockback;
     [HideInInspector]
     public bool reloading = false;
+    public bool musicPlaying = false;
 }

@@ -6,14 +6,16 @@ public class Gun : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] private GunData gunData;
+    [SerializeField] private AudioSource audioSource; 
 
     float timeSinceLastShot;
     private bool CanShoot() => !gunData.reloading && timeSinceLastShot > 1f / (gunData.ammoRate / 60f);
     private bool shoot;
     private void Start()
     {
-        PlayerShoot.shootInput += Shoot;
-        PlayerShoot.reloadInput += StartReloading;
+        KeyboardHelper.shootInput += Shoot;
+        KeyboardHelper.reloadInput += StartReloading;
+        audioSource = GetComponent<AudioSource>();
     }
 
     public void StartReloading()
@@ -71,7 +73,14 @@ public class Gun : MonoBehaviour
                 Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
                 if (Physics.Raycast(ray.origin, ray.direction, out RaycastHit hitInfo, gunData.maxDistance))
                 {
+                    gunData.musicPlaying = true;
+                    if (gunData.musicPlaying)
+                    {
+                        audioSource.Play();
+                        gunData.musicPlaying = false;
+                    }
                     shoot = true;
+                    audioSource.Stop();
                     IDamageble damageble = hitInfo.transform.GetComponent<IDamageble>();
                     damageble?.Damage(gunData.damage);
                 }
